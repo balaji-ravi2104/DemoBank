@@ -1,0 +1,66 @@
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+	id="WebApp_ID" version="3.1">
+	<display-name>DemoBank</display-name>
+
+	<filter>
+		<filter-name>Security Filter</filter-name>
+		<filter-class>com.adventnet.iam.security.SecurityFilter</filter-class>
+
+		<init-param>
+			<param-name>config-file</param-name>
+			<param-value>conf/security.xml,conf/security-properties.xml,conf/security-common.xml</param-value>
+		</init-param>
+		<init-param>
+            <param-name>development.mode</param-name>
+            <param-value>true</param-value>
+        </init-param>
+	</filter>
+	
+	<filter-mapping>
+		<filter-name>Security Filter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<filter>
+		<filter-name>MainFilter</filter-name>
+		<filter-class>com.banking.servlet.MainFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>MainFilter</filter-name>
+		<url-pattern>/bank/*</url-pattern> <!-- Apply the filter to all requests -->
+	</filter-mapping>
+
+	<!-- Servlet Mapping for MainServlet -->
+	<servlet>
+		<servlet-name>MainServlet</servlet-name>
+		<servlet-class>com.banking.servlet.MainServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>MainServlet</servlet-name>
+		<url-pattern>/bank/*</url-pattern>
+	</servlet-mapping>
+
+	<filter>
+		<filter-name>APIFilter</filter-name>
+		<filter-class>com.banking.servlet.APIFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>APIFilter</filter-name>
+		<url-pattern>/api/*</url-pattern> <!-- Apply the filter to all requests -->
+	</filter-mapping>
+
+	<servlet>
+		<servlet-name>APIServlet</servlet-name>
+		<servlet-class>com.banking.servlet.APIServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>APIServlet</servlet-name>
+		<url-pattern>/api/*</url-pattern>
+	</servlet-mapping>
+
+	<welcome-file-list>
+		<welcome-file>Home.jsp</welcome-file>
+	</welcome-file-list>
+</web-app>
