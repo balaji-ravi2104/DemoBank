@@ -2,6 +2,32 @@
 
 <security xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="security.xsd">
+	<param-groups>
+		<param-group name="userformparams">
+			<param name="firstname" regex="firstName" trim="true"/>
+			<param name="lastname" regex="lastName" trim="true"/>
+			<param name="email" regex="email_id"/>
+			<param name="gender" regex="cleartextpattern"/>
+			<param name="contactnumber" regex="contactNumber"/>
+			<param name="dateOfBirth" regex="date"/>
+			<param name="address" regex="cleartextpattern" trim="true"/>
+		</param-group>
+		<param-group name="statementviewparams">
+			<param name="accountNumber" type="long"/>
+			<param name="fromDate" regex="date"/>
+			<param name="toDate" regex="date"/>
+		</param-group>
+		<param-group name="transactionparams">
+			<param name="transactionaccountNumber" type="long"/>
+			<param name="amount" type="double"/>
+			<param name="description" regex="cleartextpattern"/>
+		</param-group>
+		<param-group name="transferparams">
+			<param name="accountNumber" type="long"/>
+			<param name="amount" type="double"/>
+			<param name="message" regex="cleartextpattern"/>
+		</param-group>
+	</param-groups>
 	
 	<urls prefix="/bank">
 		<url path="/home" authentication="optional" method="get"></url>
@@ -23,27 +49,15 @@
 			<param name="userId" type="int"/>
 		</url>
 		<url path="/updateUser" authentication="required" method="post">
-			<param name="firstname" regex="firstName" trim="true"/>
-			<param name="lastname" regex="lastName" trim="true"/>
-			<param name="email" regex="email_id"/>
-			<param name="gender" regex="cleartextpattern"/>
-			<param name="contactnumber" regex="contactNumber"/>
-			<param name="dateOfBirth" regex="date"/>
+			<param-group name="userformparams"/>
 			<param name="userId" type="int" />
 			<param name="status" regex="cleartextpattern"/>
-			<param name="address" regex="cleartextpattern" trim="true"/>
 		</url>
 		
 		<url path="/addCustomer" authentication="required" method="get"></url>
 		<url path="/addEmployee" authentication="required" method="get"></url>
 		<url path="/addUser" authentication="required" method="post">
-			<param name="firstname" regex="firstName" trim="true"/>
-			<param name="lastname" regex="lastName" trim="true"/>
-			<param name="email" regex="email_id"/>
-			<param name="gender" regex="cleartextpattern"/>
-			<param name="contactnumber" regex="contactNumber"/>
-			<param name="dateOfBirth" regex="date"/>
-			<param name="address" regex="cleartextpattern" trim="true"/>
+			<param-group name="userformparams"/>
 			<param name="pannumber" regex="pannumber" secret="true" trim="true"/>
 			<param name="aadharnumber" regex="aadharnumber" secret="true" trim="true"/>
 			<param name="branchId" type="int"/>
@@ -70,20 +84,14 @@
 		
 		<url path="/employee/transaction" authentication="required" method="get"></url>
 		<url path="/getTransactions" authentication="required" method="post">
-			<param name="accountNumber" type="long"/>
-			<param name="fromDate" regex="date"/>
-			<param name="toDate" regex="date"/>
+			<param-group name="statementviewparams" />
 		</url>
 		
 		<url path="/employeeDeposit" authentication="required" method="post" threshold="5" duration="2" lock-period="1">
-			<param name="transactionaccountNumber" type="long"/>
-			<param name="amount" type="double"/>
-			<param name="description" regex="cleartextpattern"/>
+			<param-group name="transactionparams" />
 		</url>
 		<url path="/employeeWithdraw" authentication="required" method="post" threshold="5" duration="2" lock-period="1">
-			<param name="transactionaccountNumber" type="long"/>
-			<param name="amount" type="double"/>
-			<param name="description" regex="cleartextpattern"/>
+			<param-group name="transactionparams" />
 		</url>
 		
 		<url path="/employee/apiservice" authentication="required" method="get"></url>
@@ -107,22 +115,16 @@
 		<url path="/transferOutSideBank" authentication="required" method="post"></url>
 		<url path="/transferInBank" authentication="required" method="post"></url>
 		<url path="/otherBankTransfer" authentication="required" method="post" threshold="5" duration="2" lock-period="1">
-			<param name="accountNumber" type="long"/>
-			<param name="amount" type="double"/>
+			<param-group name="transferparams" />
 			<param name="ifsc" regex="cleartextpattern"/>
-			<param name="message" regex="cleartextpattern"/>
 		</url>
 		<url path="/withinBankTransfer" authentication="required" method="post" threshold="5" duration="2" lock-period="1">
-			<param name="accountNumber" type="long"/>
-			<param name="amount" type="double"/>
-			<param name="message" regex="cleartextpattern"/>
+			<param-group name="transferparams" />
 		</url>
 		
 		<url path="/customer/Statement" authentication="required" method="get"></url>
 		<url path="/getStatements" authentication="required" method="post">
-			<param name="accountNumber" type="long"/>
-			<param name="fromDate" regex="date"/>
-			<param name="toDate" regex="date"/>
+			<param-group name="statementviewparams" />
 		</url>
 		
 		<url path="/customer/profile" authentication="required" method="get"></url>
