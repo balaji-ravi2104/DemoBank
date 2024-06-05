@@ -32,7 +32,7 @@
 	<urls prefix="/bank">
 		<url path="/home" authentication="optional" method="get"></url>
 		<url path="/login" authentication="optional" method="get"></url>
-		<url path="/login" authentication="required" method="post" threshold="5" duration="2" lock-period="1">
+		<url path="/login" authentication="required" method="post">
 			<param name="userId" type="int" />
 			<param name="password" regex="password" secret="true"/>
 		</url>
