@@ -140,8 +140,8 @@
 	
 	<!-- Images based end points -->
 	<urls prefix="/images">
-		<url path="/logo.png"></url>
-		<url path="/Login.png"></url>
+		<url path="/Login.png" method="get"></url>
+		<url path="/logo.png" method="get"></url>
 		<url path="/createCustomer.png" method="get"></url>
 		<url path="/Account.png" method="get"></url>
 		<url path="/AccountLogo.png" method="get"></url>
@@ -166,3 +166,5 @@
 	</regexes> 
 	
 </security>
+
+
