@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<security xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="security.xsd">
+	<param-groups>
+		<param-group name="userformparams">
+			<param name="firstname" regex="firstName" trim="true"/>
+			<param name="lastname" regex="lastName" trim="true"/>
+			<param name="email" regex="email_id"/>
+			<param name="gender" regex="cleartextpattern"/>
+			<param name="contactnumber" regex="contactNumber"/>
+			<param name="dateOfBirth" regex="date"/>
+			<param name="address" regex="cleartextpattern" trim="true"/>
+		</param-group>
+		<param-group name="statementviewparams">
+			<param name="accountNumber" type="long"/>
+			<param name="fromDate" regex="date"/>
+			<param name="toDate" regex="date"/>
+		</param-group>
+		<param-group name="transactionparams">
+			<param name="transactionaccountNumber" type="long"/>
+			<param name="amount" type="double"/>
+			<param name="description" regex="cleartextpattern"/>
+		</param-group>
+		<param-group name="transferparams">
+			<param name="accountNumber" type="long"/>
+			<param name="amount" type="double"/>
+			<param name="message" regex="cleartextpattern"/>
+		</param-group>
+	</param-groups>
+	
+	<urls prefix="/bank">
+		<url path="/home" authentication="optional" method="get"></url>
+		<url path="/login" authentication="optional" method="get"></url>
+		<url path="/login" authentication="required" method="post">
+			<param name="userId" type="int" />
+			<param name="password" regex="password" secret="true"/>
+		</url>
+		
+		<!-- Employee Pages Based End Points -->
+
+		<url path="/employee/customer" authentication="required"
+			method="get"></url>
+		<url path="/getCustomer" authentication="required"
+			method="post">
+			<param name="userId" type="int" />
+		</url>
+		<url path="/updateCustomer" authentication="required" method="post">
+			<param name="userId" type="int"/>
+		</url>
+		<url path="/updateUser" authentication="required" method="post">
+			<param-group name="userformparams"/>
+			<param name="userId" type="int" />
+			<param name="status" regex="cleartextpattern"/>
+		</url>
+		
+		<url path="/addCustomer" authentication="required" method="get"></url>
+		<url path="/addEmployee" authentication="required" method="get"></url>
+		<url path="/addUser" authentication="required" method="post">
+			<param-group name="userformparams"/>
+			<param name="pannumber" regex="pannumber" secret="true" trim="true"/>
+			<param name="aadharnumber" regex="aadharnumber" secret="true" trim="true"/>
+			<param name="branchId" type="int"/>
+		</url>
+		
+		<url path="/employee/account" authentication="required" method="get"></url>
+		<url path="/createaccount" authentication="required" method="get"></url>
+		<url path="/account/getAccounts" authentication="required" method="post">
+			<param name="userId" type="int"/>
+			<param name="branchId" type="int"/>
+		</url>
+		<url path="/updateAccountStatus" authentication="required" method="post">
+			<param name="userId" type="int"/>
+			<param name="branchId" type="int"/>
+			<param name="accountNumber" type="long"/>
+			<param name="status" regex="cleartextpattern"/>
+		</url>
+		<url path="/createAccount" authentication="required" method="post">
+			<param name="userId" type="int"/>
+			<param name="branchId" type="int"/>
+			<param name="accountType" regex="cleartextpattern"/>
+			<param name="balance" type="double"/>
+		</url>
+		
+		<url path="/employee/transaction" authentication="required" method="get"></url>
+		<url path="/getTransactions" authentication="required" method="post">
+			<param-group name="statementviewparams" />
+		</url>
+		
+		<url path="/employeeDeposit" authentication="required" method="post" threshold="5" duration="2" lock-period="1">
+			<param-group name="transactionparams" />
+		</url>
+		<url path="/employeeWithdraw" authentication="required" method="post" threshold="5" duration="2" lock-period="1">
+			<param-group name="transactionparams" />
+		</url>
+		
+		<url path="/employee/apiservice" authentication="required" method="get"></url>
+		<url path="/api/getapikey" authentication="required" method="post">
+			<param name="userId" type="int"/>
+		</url>
+		<url path="/api/createapikey" authentication="required" method="post">
+			<param name="userId" type="int"/>
+		</url>
+		
+		
+		<!-- Customer Pages Based End Points-->
+		
+		<url path="/customer/account" authentication="required" method="get"></url>
+		<url path="/switchAccount" authentication="required" method="post"></url>
+		<url path="/changeAccount" authentication="required" method="post">
+			<param name="accountNumber" type="long"/>
+		</url>
+		
+		<url path="/customer/transaction" authentication="required" method="get"></url>
+		<url path="/transferOutSideBank" authentication="required" method="post"></url>
+		<url path="/transferInBank" authentication="required" method="post"></url>
+		<url path="/otherBankTransfer" authentication="required" method="post" threshold="5" duration="2" lock-period="1">
+			<param-group name="transferparams" />
+			<param name="ifsc" regex="cleartextpattern"/>
+		</url>
+		<url path="/withinBankTransfer" authentication="required" method="post" threshold="5" duration="2" lock-period="1">
+			<param-group name="transferparams" />
+		</url>
+		
+		<url path="/customer/Statement" authentication="required" method="get"></url>
+		<url path="/getStatements" authentication="required" method="post">
+			<param-group name="statementviewparams" />
+		</url>
+		
+		<url path="/customer/profile" authentication="required" method="get"></url>
+		<url path="/updatePassword" authentication="required" method="post" threshold="5" duration="2" lock-period="1">
+			<param name="userId" type="int"/>
+			<param name="oldpassword" regex="password" secret="true"/>
+			<param name="newpassword" regex="password" secret="true"/>
+			<param name="confirmpassword" regex="password" secret="true"/>
+		</url>
+		<url path="/404" authentication="required" method="get"></url>
+		<url path="/logout" authentication="required" method="post"></url>
+	</urls>
+	
+	<!-- Images based end points -->
+	<urls prefix="/images">
+		<url path="/Login.png" method="get"></url>
+		<url path="/logo.png" method="get"></url>
+		<url path="/createCustomer.png" method="get"></url>
+		<url path="/Account.png" method="get"></url>
+		<url path="/AccountLogo.png" method="get"></url>
+		<url path="/Payment.png" method="get"></url>
+		<url path="/profile.png" method="get"></url>
+	</urls>
+	
+	<!--CSS based end points  -->
+	<urls prefix="/css">
+		<url path="/style.css" method="get"></url>
+	</urls>
+
+	<regexes>
+		<regex name="password" value="^.{8,30}$"/>
+		<regex name="firstName" value="^[a-zA-Z]{3,}$"/>
+		<regex name="lastName" value="^[a-zA-Z]{1,}$"/>
+		<regex name="email_id" value="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"/>
+		<regex name="contactNumber" value="^[7-9]{1}[0-9]{9}$"/>
+		<regex name="date" value="^[0-9]{4}-[0-9]{2}-[0-9]{2}$"/>
+		<regex name="pannumber" value="^[A-Z]{5}[0-9]{4}[A-Z]{1}$"/>
+		<regex name="aadharnumber" value="^[0-9]{12}$"/>
+	</regexes> 
+	
+</security>
+
+
